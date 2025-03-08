@@ -64,8 +64,9 @@ const createVehicle = async (req, res) => {
         const savedVehicle = await newVehicle.save();
         res.status(201).json(savedVehicle);
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
-    }
+        console.error("Error creating vehicle:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }    
 };
 
 // @desc Update a vehicle
