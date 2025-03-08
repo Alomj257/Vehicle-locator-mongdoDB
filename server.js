@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const vehicleRoutes = require("./routes/vehicleRoutes");
+const vehicleUsageRoutes = require("./routes/vehicleUsageRoutes");
 const errorHandler = require("./middleware/errorMiddleware");
 
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/vehicles", vehicleRoutes);
+app.use("/api/vehicle-usage", vehicleUsageRoutes);
 
 // Error Middleware
 app.use(errorHandler);
