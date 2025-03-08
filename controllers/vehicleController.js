@@ -5,9 +5,13 @@ const Vehicle = require("../models/vehicleModel");
 const getVehicles = async (req, res) => {
     try {
         const vehicles = await Vehicle.find();
-        res.status(200).json(vehicles);
+        res.status(200).json({
+            message: "Vehicles retrieved successfully",
+            data: vehicles
+        });
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
+        console.error("Error fetching vehicles:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
@@ -62,7 +66,10 @@ const createVehicle = async (req, res) => {
         });
 
         const savedVehicle = await newVehicle.save();
-        res.status(201).json(savedVehicle);
+        res.status(201).json({
+            message: "Vehicle created successfully",
+            data: savedVehicle
+        });
     } catch (error) {
         console.error("Error creating vehicle:", error);
         res.status(500).json({ message: "Server error", error: error.message });
@@ -73,20 +80,26 @@ const createVehicle = async (req, res) => {
 // @route PUT /api/vehicles/:id
 const updateVehicle = async (req, res) => {
     try {
+        // Check if the vehicle exists
         const vehicle = await Vehicle.findById(req.params.id);
         if (!vehicle) {
             return res.status(404).json({ message: "Vehicle not found" });
         }
 
+        // Update the vehicle
         const updatedVehicle = await Vehicle.findByIdAndUpdate(
             req.params.id,
             req.body,
-            { new: true } // Return updated document
+            { new: true, runValidators: true } // Return updated doc & validate fields
         );
 
-        res.status(200).json(updatedVehicle);
+        res.status(200).json({
+            message: "Vehicle updated successfully",
+            data: updatedVehicle
+        });
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
+        console.error("Error updating vehicle:", error); // Log exact error
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
@@ -95,12 +108,18 @@ const updateVehicle = async (req, res) => {
 const getVehicleById = async (req, res) => {
     try {
         const vehicle = await Vehicle.findById(req.params.id);
+
         if (!vehicle) {
             return res.status(404).json({ message: "Vehicle not found" });
         }
-        res.status(200).json(vehicle);
+
+        res.status(200).json({
+            message: "Vehicle fetched successfully",
+            data: vehicle
+        });
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
+        console.error("Error fetching vehicle by ID:", error); // Logs the exact error
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
@@ -116,7 +135,8 @@ const deleteVehicle = async (req, res) => {
         await vehicle.deleteOne();
         res.status(200).json({ message: "Vehicle deleted successfully" });
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
+        console.error("Error deleting vehicle:", error); // Logs the exact error
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
