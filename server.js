@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const vehicleRoutes = require("./routes/vehicleRoutes");
 const vehicleUsageRoutes = require("./routes/vehicleUsageRoutes");
+const chargingPointRoutes = require("./routes/chargingPointRoutes");
 const errorHandler = require("./middleware/errorMiddleware");
 
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(express.json());
 // Routes
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/vehicle-usage", vehicleUsageRoutes);
+app.use("/api/charging-points", chargingPointRoutes);
 
 // Error Middleware
 app.use(errorHandler);
